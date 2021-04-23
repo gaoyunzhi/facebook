@@ -65,6 +65,7 @@ def run():
 					continue
 				existing.add(album.url)
 			if count == 0:
+				print(page, count)
 				return
 		
 if __name__ == '__main__':
