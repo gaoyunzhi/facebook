@@ -33,22 +33,19 @@ def run():
 		channel = tele.bot.get_chat(channel_id)
 		schedule = list(pages.items())
 		random.shuffle(schedule)
-		for page, detail in schedule:
-			posts = facebook_scraper.get_posts(page)
+		for page, detail in schedule[:3]:
+			posts = facebook_scraper.get_posts(page, pages=3)
 			count = 0
 			for post in posts:
 				count += 1
 				url = post['post_url']
+				with open('nohup.out', 'a') as f:
+					f.write('%s\n%s\n\n' % (url, str(post)))
 				if existing.contain(url):
 					continue
 				if getKey(url) in [getKey(item) for item in existing._db.items.keys()]:
 					continue
-				for attribute in ['shared_post_url', 'video']:
-					if post[attribute]:
-						print(url, attribute, post[attribute])
-						print(post)
 				if post['likes'] < detail.get('like', 500):
-					print('skip', url, post['likes'], page)
 					continue
 				album = facebook_to_album.get(post)
 				if not sent:
@@ -59,13 +56,13 @@ def run():
 				try:
 					album_sender.send_v2(channel, album)
 				except Exception as e:
-					print(url, e)
+					print('facebook sending fail', url, e)
 					with open('nohup.out', 'a') as f:
 						f.write('\n%s %s %s' % (url, str(e), str(post)))
 					continue
 				existing.add(album.url)
 			if count == 0:
-				print(page, count)
+				print('facebook fetch fail', page, count)
 				return
 		
 if __name__ == '__main__':
