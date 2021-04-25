@@ -33,7 +33,7 @@ def run():
 		channel = tele.bot.get_chat(channel_id)
 		schedule = list(pages.items())
 		random.shuffle(schedule)
-		for page, detail in schedule[:3]:
+		for page, detail in schedule[:1]:
 			posts = facebook_scraper.get_posts(page, pages=3)
 			count = 0
 			for post in posts:
