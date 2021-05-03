@@ -45,7 +45,7 @@ def run():
 					continue
 				if getKey(url) in [getKey(item) for item in existing._db.items.keys()]:
 					continue
-				if post['likes'] < detail.get('likes', 200):
+				if post['likes'] < detail.get('likes', 100):
 					continue
 				album = facebook_to_album.get(post)
 				if not sent:
