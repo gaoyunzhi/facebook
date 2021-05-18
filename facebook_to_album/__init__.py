@@ -34,6 +34,6 @@ def get(content):
     result = Result()
     result.url = content['post_url']
     result.video = content['video']
-    result.cap_html_v2 = getText(content['post_text'].strip(), content['shared_text'], content.get('link'))
+    result.cap_html_v2 = getText((content['post_text'] or '').strip(), content['shared_text'], content.get('link'))
     result.imgs = list(dedup(content['images'] or []))
     return result
