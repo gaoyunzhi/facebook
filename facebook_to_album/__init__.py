@@ -18,7 +18,7 @@ def dedup(images):
 def getText(text, comment, link):
 	if link:
 		return text + '\n\n' + link
-	if not comment:
+	if not comment or text == comment:
 		return text
 	index = comment.find('\n\n')
 	if index == -1:
