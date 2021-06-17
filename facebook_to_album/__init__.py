@@ -42,7 +42,7 @@ def dedupText(text):
 			return ''.join(result).strip()
 		existing.add(line)
 		result.append(line)
-	return ''.join(result).strip()
+	return '\n'.join(result).strip().replace('\n\n\n', '\n\n')
 
 def get(content):
     result = Result()
