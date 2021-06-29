@@ -47,7 +47,7 @@ def run():
 					continue
 				if post['likes'] < detail.get('likes', 100):
 					continue
-				album = facebook_to_album.get(post)
+				album = facebook_to_album.get(post, detail)
 				if not sent:
 					sent = True
 				else:

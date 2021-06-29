@@ -39,15 +39,21 @@ def dedupText(text):
 			result.append(line)
 			continue
 		if line in existing:
-			return ''.join(result).strip()
+			return '\n'.join(result).strip().replace('\n\n\n', '\n\n')
 		existing.add(line)
 		result.append(line)
 	return '\n'.join(result).strip().replace('\n\n\n', '\n\n')
 
-def get(content):
+def get(content, setting):
     result = Result()
     result.url = content['post_url']
     result.video = content['video']
     result.cap_html_v2 = dedupText(getText((content['post_text'] or '').strip(), content['shared_text'], content.get('link')))
     result.imgs = list(dedup(content['images'] or content['images_lowquality'] or []))
+    if setting.get('prefix'):
+    	result.cap_html_v2 = setting.get('prefix') + result.cap_html_v2
+    if content.get('listing_price'):
+    	result.cap_html_v2 += '\n\n【价格】%s\n【邮编】%s\n【联系】%s' % (
+    		content.get('listing_price'), content.get('listing_location'), content.get('post_url'))
+    print(result)
     return result
