@@ -50,6 +50,8 @@ def get(content, setting):
     result.video = content['video']
     result.cap_html_v2 = dedupText(getText((content['post_text'] or '').strip(), content['shared_text'], content.get('link')))
     result.imgs = list(dedup(content['images'] or content['images_lowquality'] or []))
+    if result.imgs and result.imgs[0].startswith('https://m.facebook.com/photo/view_full_size'):
+    	result.imgs = list(dedup(content['images_lowquality'] or []))
     if setting.get('prefix'):
     	result.cap_html_v2 = setting.get('prefix') + result.cap_html_v2
     if content.get('listing_price'):
