@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import yaml
-from telegram_util import log_on_fail
+from telegram_util import log_on_fail, matchKey
 from telegram.ext import Updater
 import plain_db
 import cached_url
