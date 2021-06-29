@@ -11,7 +11,7 @@ import album_sender
 import time
 import facebook_to_album
 import facebook_scraper
-import random
+import plain_db
 
 with open('credential') as f:
 	credential = yaml.load(f, Loader=yaml.FullLoader)
@@ -22,6 +22,7 @@ with open('db/setting') as f:
 existing = plain_db.loadKeyOnlyDB('existing')
 tele = Updater(credential['bot_token'], use_context=True)
 debug_group = tele.bot.get_chat(credential['debug_group'])
+blocklist = plain_db.loadKeyOnlyDB('blocklist')
 
 def getKey(url):
 	return url.strip('/').split('/')[-1]
@@ -46,6 +47,8 @@ def run():
 				if getKey(url) in [getKey(item) for item in existing._db.items.keys()]:
 					continue
 				if post['likes'] < detail.get('likes', 100):
+					continue
+				if matchKey(str(post), blocklist.items()):
 					continue
 				album = facebook_to_album.get(post, detail)
 				if not sent:
