@@ -49,5 +49,5 @@ def get(content):
     result.url = content['post_url']
     result.video = content['video']
     result.cap_html_v2 = dedupText(getText((content['post_text'] or '').strip(), content['shared_text'], content.get('link')))
-    result.imgs = list(dedup(content['images'] or []))
+    result.imgs = list(dedup(content['images'] or content['images_lowquality'] or []))
     return result
