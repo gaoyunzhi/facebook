@@ -12,6 +12,7 @@ import time
 import facebook_to_album
 import facebook_scraper
 import plain_db
+import random
 
 with open('credential') as f:
 	credential = yaml.load(f, Loader=yaml.FullLoader)

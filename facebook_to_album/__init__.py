@@ -57,5 +57,4 @@ def get(content, setting):
     if content.get('listing_price'):
     	result.cap_html_v2 += '\n\n【价格】%s\n【邮编】%s\n【联系】%s' % (
     		content.get('listing_price'), content.get('listing_location'), content.get('post_url'))
-    print(result)
     return result
