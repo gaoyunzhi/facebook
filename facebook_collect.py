@@ -34,9 +34,9 @@ def getSchedule():
 	schedules = []
 	for channel_id, pages in setting.items():
 		for page, detail in pages.items():
-			schedules.append((channel_id, pages.items()
-			if fetchtime.get(page) > time.time() - 24 * 60 * 60:
-				continue
+			schedules.append((fetchtime.get(page, 0), channel_id, page, detail))
+	schedules.sort()
+	_, channel_id, page, detail = schedules[0]
 	fetchtime.update(page, int(time.time()))
 	return tele.bot.get_chat(channel_id), page, detail
 
