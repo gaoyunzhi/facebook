@@ -43,7 +43,13 @@ def getSchedule():
 @log_on_fail(debug_group)
 def run():
 	channel, page, detail = getSchedule()
-	posts = facebook_scraper.get_posts(page, pages=10)
+	try:
+		posts = facebook_scraper.get_posts(page, pages=10)
+	except Exception as e:
+		message = 'facebook fetch failed for %s: %s' % (page, e)
+        print(message)
+        debug_group.send_message(message)
+        return
 	for post in posts:
 		url = post['post_url']
 		with open('nohup.out', 'a') as f:
