@@ -56,7 +56,9 @@ def run():
         print(message)
         debug_group.send_message(message)
         return
+    count = 0
     for post in posts:
+        count += 1
         url = post['post_url']
         with open('nohup.out', 'a') as f:
             f.write('%s\n%s\n\n' % (url, str(post)))
@@ -77,6 +79,8 @@ def run():
                 f.write('\n%s %s %s' % (url, str(e), str(post)))
             continue
         existing.add(album.url)
+    if count == 0:
+        message = 'facebook fetched nothing: %s' % page
         
 if __name__ == '__main__':
     run()
