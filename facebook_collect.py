@@ -26,14 +26,18 @@ tele = Updater(credential['bot_token'], use_context=True)
 debug_group = tele.bot.get_chat(credential['debug_group'])
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
 fetchtime = plain_db.load('fetchtime')
+stale = plain_db.loadKeyOnlyDB('stale')
 
 def getKey(url):
     return url.strip('/').split('/')[-1]
 
 def getSchedule():
     schedules = []
+    include_stale = random.random() < 0.1
     for channel_id, pages in setting.items():
         for page, detail in pages.items():
+            if page in stale.items() and not include_stale:
+                continue
             schedules.append((fetchtime.get(page, 0), channel_id, page, detail))
     schedules.sort()
     if time.time() - schedules[-1][0] < 30 * 60:
@@ -57,11 +61,13 @@ def run():
         debug_group.send_message(message)
         return
     count = 0
+    latest_create_at = 0
     for post in posts:
         count += 1
         url = post['post_url']
-        with open('nohup.out', 'a') as f:
-            f.write('%s\n%s\n\n' % (url, str(post)))
+        with open('tmp_post', 'w') as f:
+            f.write('%s\n%s' % (url, str(post)))
+        latest_create_at = max(post['time'].timestamp(), latest_create_at)
         if existing.contain(url):
             continue
         if getKey(url) in [getKey(item) for item in existing._db.items.keys()]:
@@ -75,12 +81,17 @@ def run():
             album_sender.send_v2(channel, album)
         except Exception as e:
             print('facebook sending fail', url, e)
-            with open('nohup.out', 'a') as f:
-                f.write('\n%s %s %s' % (url, str(e), str(post)))
+            with open('tmp_failed_post', 'w') as f:
+                f.write('%s %s %s' % (url, str(e), str(post)))
             continue
         existing.add(album.url)
     if count == 0:
         message = 'facebook fetched nothing: %s' % page
-        
+    if latest_create_at != 0:
+        if time.time() - latest_create_at > 60 * 24 * 60 * 60:
+            stale.add(page)
+        else:
+            stale.remove(page)
+
 if __name__ == '__main__':
     run()
