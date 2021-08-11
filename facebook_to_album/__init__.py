@@ -4,6 +4,11 @@
 name = 'facebook_to_album'
 
 from telegram_util import AlbumResult as Result
+import hanzidentifier
+from telegram_util import isCN
+from opencc import OpenCC
+
+cc = OpenCC('tw2sp')
 
 def dedup(images):
 	exist = set()
@@ -44,11 +49,22 @@ def dedupText(text):
 		result.append(line)
 	return '\n'.join(result).strip().replace('\n\n\n', '\n\n')
 
+def shouldSimplify(text):
+	for c in text:
+		if isCN(c) and not hanzidentifier.is_simplified(c):
+			return True
+	return False
+
+def simplify(text):
+	if shouldSimplify(text):
+		return cc.convert(text)
+	return text
+
 def get(content, setting):
     result = Result()
     result.url = content['post_url']
     result.video = content['video']
-    result.cap_html_v2 = dedupText(getText((content['post_text'] or '').strip(), content['shared_text'], content.get('link')))
+    result.cap_html_v2 = simplify(dedupText(getText((content['post_text'] or '').strip(), content['shared_text'], content.get('link'))))
     result.imgs = list(dedup(content['images'] or content['images_lowquality'] or []))
     if result.imgs and result.imgs[0].startswith('https://m.facebook.com/photo/view_full_size'):
     	result.imgs = list(dedup(content['images_lowquality'] or []))
