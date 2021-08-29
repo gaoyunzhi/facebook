@@ -24,6 +24,7 @@ with open('db/setting') as f:
 existing = plain_db.loadKeyOnlyDB('existing')
 tele = Updater(credential['bot_token'], use_context=True)
 debug_group = tele.bot.get_chat(credential['debug_group'])
+translate_channel = tele.bot.get_chat(credential['translate_channel'])
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
 fetchtime = plain_db.load('fetchtime')
 stale = plain_db.loadKeyOnlyDB('stale')
@@ -79,6 +80,7 @@ def run():
         album = facebook_to_album.get(post, detail)
         try:
             album_sender.send_v2(channel, album)
+            album_sender.send_v2(translate_channel, album.toPlain())
         except Exception as e:
             print('facebook sending fail', url, e)
             with open('tmp_failed_post', 'w') as f:
