@@ -14,6 +14,10 @@ import facebook_scraper
 import plain_db
 import random
 import time
+import warnings
+warnings.filterwarnings('ignore')
+
+GAP_MIN = 100
 
 with open('credential') as f:
     credential = yaml.load(f, Loader=yaml.FullLoader)
@@ -41,7 +45,7 @@ def getSchedule():
                 continue
             schedules.append((fetchtime.get(page, 0), channel_id, page, detail))
     schedules.sort()
-    if time.time() - schedules[-1][0] < 30 * 60:
+    if time.time() - schedules[-1][0] < GAP_MIN * 60:
         return
     _, channel_id, page, detail = schedules[0]
     fetchtime.update(page, int(time.time()))
@@ -51,7 +55,7 @@ def getSchedule():
 def run():
     schedule = getSchedule()
     if not schedule:
-        print('facebook skip, min_interval: 30 minutes')
+        print('facebook skip, min_interval: %d minutes' % GAP_MIN)
         return
     channel, page, detail = schedule
     try:
