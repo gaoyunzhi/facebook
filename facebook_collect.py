@@ -17,7 +17,7 @@ import time
 import warnings
 warnings.filterwarnings('ignore')
 
-GAP_MIN = 100
+GAP_MIN = 30
 
 with open('credential') as f:
     credential = yaml.load(f, Loader=yaml.FullLoader)
