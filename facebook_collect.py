@@ -39,7 +39,7 @@ def getKey(url):
 def getSchedule():
     schedules = []
     include_stale = random.random() < 0.01
-    priority_only = random.random() > 0.5
+    priority_only = random.random() > 0.4
     for channel_id, pages in setting.items():
         for page, detail in pages.items():
             if page in stale.items() and not include_stale:
