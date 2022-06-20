@@ -7,3 +7,5 @@
 *existing*
 db/blocklist
 db/fetchtime
+*backup
+backup/*
