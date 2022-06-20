@@ -1,6 +1,7 @@
 -1001216837149:
   vellumandvinyl:
     likes: 100
+    priority: 1
   elisegravelbooks:
     likes: 1000
   disabledfeminism:
@@ -15,14 +16,18 @@
   DigitalBlackBloc: {}
   transarmy:
     likes: 50
+    priority: 1
   lovetoallproject:
     likes: 10
   pinkmantaray: {}
   feministnews.us:
     likes: 2000
-  alliesacademy: {}
-  genderinclusiveschools: {}
-  WOMENSRIGHTSNEWS: {}
+  alliesacademy: 
+    priority: 1
+  genderinclusiveschools: 
+    priority: 1
+  WOMENSRIGHTSNEWS:
+    priority: 1
   TheOther98: 
     likes: 20000
   unwomen:
