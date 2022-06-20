@@ -44,6 +44,8 @@ def getSchedule():
         for page, detail in pages.items():
             if page in stale.items() and not include_stale:
                 continue
+            if priority_only and not detail.get('priority'):
+                continue
             schedules.append((fetchtime.get(page, 0), channel_id, page, detail))
     schedules.sort()
     if time.time() - schedules[-1][0] < GAP_MIN * 60:
