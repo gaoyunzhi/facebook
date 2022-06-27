@@ -13,6 +13,8 @@ cc = OpenCC('tw2sp')
 def dedup(images):
 	exist = set()
 	for image in images:
+		if not image:
+			continue
 		if image in exist:
 			continue
 		if 'p32x32' in image:
